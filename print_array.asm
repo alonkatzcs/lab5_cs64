@@ -17,14 +17,15 @@
 .text
 printA:
     # TODO: Write your function code here
-	move $t1, $a2
+	
 	li $t0, 0 
 	j loop
 
 loop:
-	bge $t0, $t1, printAReturn
-
-	lw $t2, 0($a1)
+	bge $t0, $a1, printAReturn
+	
+	move $t5, $a0
+	lw $t2, 0($a0)
 	move $a0, $t2
 
 	li $v0, 1
@@ -34,7 +35,8 @@ loop:
 	li $v0, 4
 	syscall
 
-	addiu $a1, $a1, 4
+	move $a0, $t5
+	addiu $a0, $a0, 4
 	addiu $t0, $t0, 1
 
 	j loop
@@ -45,16 +47,16 @@ printAReturn:
 
 
 main:
-	la $a1, myArray
-	li $a2, 10
-	move $s1, $a1
-	move $s2, $a2
+	la $a0, myArray
+	li $a1, 10
+	move $s0, $a0
+	
 	li $v0, 4
 	la $a0, contentStr
 	syscall
+	move $a0, $s0
 	jal printA
-	move $a1, $s1
-	move $a2, $s2
+	
 	# TODO: Write your main function code here
 
 exit:
